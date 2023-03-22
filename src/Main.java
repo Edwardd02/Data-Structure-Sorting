@@ -1,27 +1,29 @@
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        for(int n = 5; n < 8; n++)
-        {
+        for (int n = 5; n < 10; n++) {
             int length = (int) Math.pow(2, n);
             int[] arr = new int[length];
-            for(int i = 0; i < Math.pow(2, n); i++)
-            {
-                arr[i] = (int)(Math.random() * ((int) Math.pow(2, 11)));
+            for (int i = 0; i < Math.pow(2, n); i++) {
+                arr[i] = ((int) (Math.random() * ((int) Math.pow(2, 11)))) * ((int) (Math.random() * 2) == 0 ? 1 : -1);
             }
-//            System.out.println("Insertion Sort with " + length +" elements: " + Arrays.toString(insertionSort(arr, 0, length)));
-//            System.out.println("Quick Sort with     " + length +" elements: " + Arrays.toString(quickSort(arr, 0, arr.length - 1)));
-          System.out.println("Merge Sort with     " + length +" elements: " + Arrays.toString(mergeSort(arr)));
-  //          System.out.println("Tim Sort with       " + length +" elements: " + Arrays.toString(timSort(arr)));
+            int[] insertionSort = insertionSort(arr, 0, length);
+            System.out.println("Insertion Sort with ---" + length + " elements: " + Arrays.toString(insertionSort));
+            int[] quickSort = quickSort(arr, 0, length - 1);
+            System.out.println("Quick Sort with -------" + length + " elements: " + Arrays.toString(quickSort));
+            int[] mergeSort = mergeSort(arr);
+            System.out.println("Merge Sort with -------" + length + " elements: " + Arrays.toString(mergeSort));
+            int[] timSort = timSort(arr);
+            System.out.println("Tim Sort with ---------" + length + " elements: " + Arrays.toString(timSort));
+
         }
     }
-    public static int[] insertionSort(int[] arr, int start, int end){
-        for(int nextPos = start + 1; nextPos < end; nextPos++){
+
+    public static int[] insertionSort(int[] arr, int start, int end) {
+        for (int nextPos = start + 1; nextPos < end; nextPos++) {
             int nextVal = arr[nextPos];
-            while(nextPos > start && arr[nextPos - 1] > nextVal)
-            {
+            while (nextPos > start && arr[nextPos - 1] > nextVal) {
                 arr[nextPos] = arr[nextPos - 1];
                 nextPos--;
             }
@@ -29,28 +31,25 @@ public class Main {
         }
         return arr;
     }
-    static public int[] quickSort(int[] arr, int first, int last){
-        if(first < last)
-        {
+
+    static public int[] quickSort(int[] arr, int first, int last) {
+        if (first < last) {
             int pivot = arr[first];
             int up = first;
             int down = last;
-            do{
-                while(arr[up] <= pivot && up != last)
-                {
+            do {
+                while (arr[up] <= pivot && up != last) {
                     up++;
                 }
-                while(arr[down] >= pivot && down != first)
-                {
+                while (arr[down] >= pivot && down != first) {
                     down--;
                 }
-                if(up < down)
-                {
+                if (up < down) {
                     int temp = arr[up];
                     arr[up] = arr[down];
                     arr[down] = temp;
                 }
-            }while(up < down);
+            } while (up < down);
             int temp = arr[first];
             arr[first] = arr[down];
             arr[down] = temp;
@@ -60,60 +59,62 @@ public class Main {
         }
         return arr;
     }
-    public static int[] mergeSort(int[] arr)
-    {
+
+    public static int[] mergeSort(int[] arr) {
         int tableSize = arr.length;
-        if(tableSize > 1)
-        {
+        if (tableSize > 1) {
             int halfSize = tableSize / 2;
             int[] leftTable;
             int[] rightTable;
-            leftTable = Arrays.copyOfRange(arr, 0, halfSize - 1);
-            rightTable = Arrays.copyOfRange(arr, 0, halfSize - 1);
+            leftTable = Arrays.copyOfRange(arr, 0, halfSize);
+            rightTable = Arrays.copyOfRange(arr, halfSize, tableSize);
             mergeSort(leftTable);
             mergeSort(rightTable);
             int i = 0, j = 0, n = 0;
-            for(; i < leftTable.length && j < rightTable.length; n++)
-            {
-                if(leftTable[i] < rightTable[j])
-                {
+            for (; i < leftTable.length && j < rightTable.length; n++) {
+                if (leftTable[i] < rightTable[j]) {
                     arr[n] = leftTable[i];
                     i++;
-                }
-                else
-                {
+                } else {
                     arr[n] = rightTable[j];
                     j++;
                 }
             }
-            if(i > j)
-            {
-                for(; j < rightTable.length; j++, n++)
-                {
+            if (i > j) {
+                for (; j < rightTable.length; j++, n++) {
                     arr[n] = rightTable[j];
                 }
-            }
-            else
-            {
-                for(; i < leftTable.length; i++, n++)
-                {
+            } else {
+                for (; i < leftTable.length; i++, n++) {
                     arr[n] = leftTable[i];
                 }
             }
-            return arr;
-        }
-        else {
-            return arr;
-        }
-    }
-    public static int[] timSort(int[] arr)
-    {
-        int length = arr.length;
-        int run = 32;
-        for(int i = 0; i < length; i += run)
-        {
-            insertionSort(arr, i, Math.min((i + run), length));
         }
         return arr;
+    }
+
+    public static int[] timSort(int[] arr) {
+        int length = arr.length;
+        int run = 16;
+        for (int i = 0; i < length; i += run) {
+            insertionSort(arr, i, Math.min((i + run), length));
+        }
+        if(run > length)
+        {
+            return arr;
+        }
+        else{
+            for(int i = run * 2; i <= length; i *= 2)
+            {
+                for(int j = 0; j < length; j += i)
+                {
+                    int[] temp = Arrays.copyOfRange(arr, j, Math.min((j + i), length));
+                    mergeSort(temp);
+                    System.arraycopy(temp, 0, arr, j, temp.length);
+                }
+            }
+        }
+        return arr;
+
     }
 }
