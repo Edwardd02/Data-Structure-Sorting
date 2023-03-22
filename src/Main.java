@@ -66,8 +66,8 @@ public class Main {
         if(tableSize > 1)
         {
             int halfSize = tableSize / 2;
-            int[] leftTable = new int[halfSize];
-            int[] rightTable = new int[tableSize -halfSize];
+            int[] leftTable;
+            int[] rightTable;
             leftTable = Arrays.copyOfRange(arr, 0, halfSize - 1);
             rightTable = Arrays.copyOfRange(arr, 0, halfSize - 1);
             mergeSort(leftTable);
