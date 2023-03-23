@@ -59,17 +59,37 @@ public class Main {
                 for (int i = 0; i < Math.pow(2, lengthOfArray); i++) {
                     randomArr[i] = ((int) (Math.random() * ((int) Math.pow(2, 11)))) * ((int) (Math.random() * 2) == 0 ? 1 : -1);
                 }
-                chart.createGraph(insertionSort(randomArr, 0, randomArr.length));
+                insertionSortDrawing(randomArr, 0, length, chart);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
             }
         });
     }
 
+    public static void insertionSortDrawing(int[] arr, int start, int end, ChartWithInputBox chart) {
+            for (int nextPos = start + 1; nextPos < end; nextPos++) {
+                chart.createGraph(arr);
+                try {
+                    Thread.sleep(5000); // sleep for 1 second
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                int nextVal = arr[nextPos];
+                while (nextPos > start && arr[nextPos - 1] > nextVal) {
+
+                    arr[nextPos] = arr[nextPos - 1];
+                    nextPos--;
+                }
+                arr[nextPos] = nextVal;
+            }
+    }
+
     public static int[] insertionSort(int[] arr, int start, int end) {
         for (int nextPos = start + 1; nextPos < end; nextPos++) {
+
             int nextVal = arr[nextPos];
             while (nextPos > start && arr[nextPos - 1] > nextVal) {
+
                 arr[nextPos] = arr[nextPos - 1];
                 nextPos--;
             }
@@ -145,15 +165,11 @@ public class Main {
         for (int i = 0; i < length; i += run) {
             insertionSort(arr, i, Math.min((i + run), length));
         }
-        if(run > length)
-        {
+        if (run > length) {
             return arr;
-        }
-        else{
-            for(int i = run * 2; i <= length; i *= 2)
-            {
-                for(int j = 0; j < length; j += i)
-                {
+        } else {
+            for (int i = run * 2; i <= length; i *= 2) {
+                for (int j = 0; j < length; j += i) {
                     int[] temp = Arrays.copyOfRange(arr, j, Math.min((j + i), length));
                     mergeSort(temp);
                     System.arraycopy(temp, 0, arr, j, temp.length);
