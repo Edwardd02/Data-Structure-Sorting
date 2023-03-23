@@ -114,11 +114,7 @@ public class Main {
         });
     }
 
-    private static void timSortDrawing(ArrayList<Integer> randomArr, int a, int i1, ChartWithInputBox chart) {
-        int[] arr = randomArr.stream().mapToInt(i -> i).toArray();
-        timSort(arr);
-        chart.updateGraph(randomArr, randomArr.size());
-    }
+
 
 
     private static void updateTextField(JTextField textField, int[] length) {
@@ -130,89 +126,6 @@ public class Main {
 
         // Do something with the updated text
     }
-
-    public static void insertionSortDrawing(ArrayList<Integer> arr, AtomicInteger start, int end, ChartWithInputBox chart) {
-        int nextPos = start.get();
-        if (nextPos < end) {
-
-            int nextVal = arr.get(start.get());
-            while (nextPos > 0 && arr.get(nextPos - 1) > nextVal) {
-
-                arr.set(nextPos, arr.get(nextPos - 1));
-                nextPos--;
-            }
-            arr.set(nextPos, nextVal);
-        }
-        chart.updateGraph(arr, end);
-
-    }
-
-    public static void quickSortDrawing(ArrayList<Integer> arr, AtomicInteger start, int end, ChartWithInputBox chart) {
-        int first = start.get();
-        if (first < end) {
-            int pivot = arr.get(first);
-            int up = first;
-            int down = end;
-            do {
-                while (arr.get(up) <= pivot && up != end) {
-                    up++;
-                }
-                while (arr.get(down) >= pivot && down != first) {
-                    down--;
-                }
-                if (up < down) {
-                    int temp = arr.get(up);
-                    arr.set(up, arr.get(down));
-                    arr.set(down, temp);
-                }
-            } while (up < down);
-            int temp = arr.get(first);
-            arr.set(first, arr.get(down));
-            arr.set(down, temp);
-            start.getAndIncrement();
-            chart.updateGraph(arr, end);
-        }
-    }
-    private static void mergeSortDrawing(ArrayList<Integer> randomArr, int i, int i1, ChartWithInputBox chart) {
-        if (i < i1) {
-            int mid = (i + i1) / 2;
-            mergeSortDrawing(randomArr, i, mid, chart);
-            mergeSortDrawing(randomArr, mid + 1, i1, chart);
-            mergeDrawing(randomArr, i, mid, i1, chart);
-        }
-    }
-
-    private static void mergeDrawing(ArrayList<Integer> randomArr, int i, int mid, int i1, ChartWithInputBox chart) {
-        int[] temp = new int[i1 - i + 1];
-        int i2 = i;
-        int j = mid + 1;
-        int k = 0;
-        while (i2 <= mid && j <= i1) {
-            if (randomArr.get(i2) < randomArr.get(j)) {
-                temp[k] = randomArr.get(i2);
-                i2++;
-            } else {
-                temp[k] = randomArr.get(j);
-                j++;
-            }
-            k++;
-        }
-        while (i2 <= mid) {
-            temp[k] = randomArr.get(i2);
-            i2++;
-            k++;
-        }
-        while (j <= i1) {
-            temp[k] = randomArr.get(j);
-            j++;
-            k++;
-        }
-        for (int l = i; l <= i1; l++) {
-            randomArr.set(l, temp[l - i]);
-        }
-        chart.updateGraph(randomArr, i1);
-    }
-
     public static int[] insertionSort(int[] arr, int start, int end) {
         for (int nextPos = start + 1; nextPos < end; nextPos++) {
 
@@ -311,4 +224,92 @@ public class Main {
         return arr;
 
     }
+    public static void insertionSortDrawing(ArrayList<Integer> arr, AtomicInteger start, int end, ChartWithInputBox chart) {
+        int nextPos = start.get();
+        if (nextPos < end) {
+
+            int nextVal = arr.get(start.get());
+            while (nextPos > 0 && arr.get(nextPos - 1) > nextVal) {
+
+                arr.set(nextPos, arr.get(nextPos - 1));
+                nextPos--;
+            }
+            arr.set(nextPos, nextVal);
+        }
+        chart.updateGraph(arr, end);
+
+    }
+
+    public static void quickSortDrawing(ArrayList<Integer> arr, AtomicInteger start, int end, ChartWithInputBox chart) {
+        int first = start.get();
+        if (first < end) {
+            int pivot = arr.get(first);
+            int up = first;
+            int down = end;
+            do {
+                while (arr.get(up) <= pivot && up != end) {
+                    up++;
+                }
+                while (arr.get(down) >= pivot && down != first) {
+                    down--;
+                }
+                if (up < down) {
+                    int temp = arr.get(up);
+                    arr.set(up, arr.get(down));
+                    arr.set(down, temp);
+                }
+            } while (up < down);
+            int temp = arr.get(first);
+            arr.set(first, arr.get(down));
+            arr.set(down, temp);
+            start.getAndIncrement();
+            chart.updateGraph(arr, end);
+        }
+    }
+    private static void mergeSortDrawing(ArrayList<Integer> randomArr, int i, int i1, ChartWithInputBox chart) {
+        if (i < i1) {
+            int mid = (i + i1) / 2;
+            mergeSortDrawing(randomArr, i, mid, chart);
+            mergeSortDrawing(randomArr, mid + 1, i1, chart);
+            mergeDrawing(randomArr, i, mid, i1, chart);
+        }
+    }
+
+    private static void mergeDrawing(ArrayList<Integer> randomArr, int i, int mid, int i1, ChartWithInputBox chart) {
+        int[] temp = new int[i1 - i + 1];
+        int i2 = i;
+        int j = mid + 1;
+        int k = 0;
+        while (i2 <= mid && j <= i1) {
+            if (randomArr.get(i2) < randomArr.get(j)) {
+                temp[k] = randomArr.get(i2);
+                i2++;
+            } else {
+                temp[k] = randomArr.get(j);
+                j++;
+            }
+            k++;
+        }
+        while (i2 <= mid) {
+            temp[k] = randomArr.get(i2);
+            i2++;
+            k++;
+        }
+        while (j <= i1) {
+            temp[k] = randomArr.get(j);
+            j++;
+            k++;
+        }
+        for (int l = i; l <= i1; l++) {
+            randomArr.set(l, temp[l - i]);
+        }
+        chart.updateGraph(randomArr, i1);
+    }
+    private static void timSortDrawing(ArrayList<Integer> randomArr, int a, int i1, ChartWithInputBox chart) {
+        int[] arr = randomArr.stream().mapToInt(i -> i).toArray();
+        timSort(arr);
+        chart.updateGraph(randomArr, randomArr.size());
+    }
+
+
 }
