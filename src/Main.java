@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,72 +27,82 @@ public class Main {
 
         // Create a new chart and set the dataset
         ChartWithInputBox chart = new ChartWithInputBox();
-        int lengthOfArray = 5;
-
+        int[] size = new int[1];
+        size[0] = 5;
+        ArrayList<Integer> randomArr = new ArrayList<>();
         JTextField textField = chart.getTextField();
         textField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                updateTextField();
+                updateTextField(textField, size);
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                updateTextField();
+                updateTextField(textField, size);
+
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                updateTextField();
+                updateTextField(textField,  size);
+
             }
 
-            private void updateTextField() {
-                String text = textField.getText();
-                System.out.println(text);
-                // Do something with the updated text
-            }
+
+
         });
 
 
-        int length = (int) Math.pow(2, lengthOfArray);
-        int[] randomArr = new int[length];
+        AtomicInteger start = new AtomicInteger(1);
         chart.getButton().addActionListener(e -> {
             // Get input value from text field
             try {
-
-                for (int i = 0; i < Math.pow(2, lengthOfArray); i++) {
-                    randomArr[i] = ((int) (Math.random() * ((int) Math.pow(2, 10)))) * ((int) (Math.random() * 2) == 0 ? 1 : -1);
+                start.set(1);
+                int lengthOfArray = (int) Math.pow(2, size[0]);
+                randomArr.clear();
+                for (int i = 0; i < lengthOfArray; i++) {
+                    randomArr.add(((int) (Math.random() * ((int) Math.pow(2, 10)))) * ((int) (Math.random() * 2) == 0 ? 1 : -1));
                 }
-                chart.updateGraph(randomArr);
+                chart.updateGraph(randomArr, lengthOfArray);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
             }
         });
-        AtomicInteger start = new AtomicInteger(1);
+
+
         chart.getSortButton().addActionListener(e -> {
             // Get input value from text field
             try {
-                insertionSortDrawing(randomArr, start, length, chart);
+                insertionSortDrawing(randomArr, start, (int) Math.pow(2, size[0]), chart);
                 start.getAndIncrement();
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
             }
         });
     }
+    private static void updateTextField(JTextField textField, int[] length) {
+        String text = textField.getText();
+        System.out.println(text);
+        if (text.length() > 0) {
+            length[0] = Integer.parseInt(text);
+        }
 
-    public static void insertionSortDrawing(int[] arr, AtomicInteger start, int end, ChartWithInputBox chart) {
+        // Do something with the updated text
+    }
+    public static void insertionSortDrawing(ArrayList<Integer> arr, AtomicInteger start, int end, ChartWithInputBox chart) {
         int nextPos = start.get();
         if (nextPos < end) {
 
-            int nextVal = arr[start.get()];
-            while (nextPos > 0 && arr[nextPos - 1] > nextVal) {
+            int nextVal = arr.get(start.get());
+            while (nextPos > 0 && arr.get(nextPos - 1) > nextVal) {
 
-                arr[nextPos] = arr[nextPos - 1];
+                arr.set(nextPos, arr.get(nextPos - 1));
                 nextPos--;
             }
-            arr[nextPos] = nextVal;
+            arr.set(nextPos, nextVal);
         }
-        chart.updateGraph(arr);
+        chart.updateGraph(arr, end);
 
     }
 

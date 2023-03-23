@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 
 public class ChartWithInputBox extends JFrame implements ActionListener {
@@ -56,10 +57,10 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    public void updateGraph(int[] arr) {
+    public void updateGraph(ArrayList<Integer> arr, int length) {
 
-        for (int i = 0; i < arr.length; i++) {
-            dataset.setValue(arr[i], "Data", Integer.toString(i + 1));
+        for (int i = 0; i < length; i++) {
+            dataset.setValue(arr.get(i), "Data", Integer.toString(i + 1));
         }
 
     }
