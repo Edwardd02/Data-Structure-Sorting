@@ -1,7 +1,6 @@
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -47,10 +46,9 @@ public class Main {
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                updateTextField(textField,  size);
+                updateTextField(textField, size);
 
             }
-
 
 
         });
@@ -71,41 +69,51 @@ public class Main {
                 JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
             }
         });
-
+        AtomicInteger sortType = new AtomicInteger(1);
+        chart.getComboBox().addActionListener(e1 -> {
+            String selected = (String) chart.getComboBox().getSelectedItem();
+            System.out.println(selected);
+            switch (Objects.requireNonNull(selected)) {
+                case "Insertion Sort" -> {
+                    sortType.set(1);
+                }
+                case "Quick Sort" -> {
+                    sortType.set(2);
+                }
+                case "Merge Sort" -> {
+                    sortType.set(3);
+                }
+                case "Tim Sort" -> {
+                    sortType.set(4);
+                }
+            }
+        });
 
         chart.getSortButton().addActionListener(e -> {
             // Get input value from text field
             try {
-                chart.getComboBox().addActionListener(e1 -> {
-                        String selected = (String) chart.getComboBox().getSelectedItem();
-                        switch (Objects.requireNonNull(selected)) {
-                            case "Insertion Sort" -> {
-                                insertionSortDrawing(randomArr, start, (int) Math.pow(2, size[0]), chart);
-                                start.getAndIncrement();
-                            }
-                            case "Quick Sort" -> {
-                                quickSortDrawing(randomArr, start, (int) Math.pow(2, size[0]) - 1, chart);
-                                start.getAndIncrement();
-                            }
-                            case "Merge Sort" -> {
-                                return;
-                            }
-                            case "Tim Sort" -> {
-                                return;
-                            }
-                            case default -> {
-                                System.out.println("Error");
-                            }
+                if (sortType.get() == 1) {
+                    insertionSortDrawing(randomArr, start, (int) Math.pow(2, size[0]), chart);
+                    start.getAndIncrement();
+                }
+                else if (sortType.get() == 2) {
+                    quickSortDrawing(randomArr, start, (int) Math.pow(2, size[0]) - 1, chart);
+                    start.getAndIncrement();
+                }
+                else if (sortType.get() == 3) {
+                    System.out.println("Merge Sort");
+                }
 
-
-                    }
-                });
+                else if (sortType.get() == 4){
+                    System.out.println("Tim Sort");
+                }
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
             }
         });
     }
+
     private static void updateTextField(JTextField textField, int[] length) {
         String text = textField.getText();
         System.out.println(text);
@@ -115,6 +123,7 @@ public class Main {
 
         // Do something with the updated text
     }
+
     public static void insertionSortDrawing(ArrayList<Integer> arr, AtomicInteger start, int end, ChartWithInputBox chart) {
         int nextPos = start.get();
         if (nextPos < end) {
@@ -130,6 +139,7 @@ public class Main {
         chart.updateGraph(arr, end);
 
     }
+
     public static void quickSortDrawing(ArrayList<Integer> arr, AtomicInteger start, int end, ChartWithInputBox chart) {
         int first = start.get();
         if (first < end) {
