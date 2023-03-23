@@ -1,7 +1,16 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
+
+import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
+        int[] timSort = new int[0];
         for (int n = 5; n < 10; n++) {
             int length = (int) Math.pow(2, n);
             int[] arr = new int[length];
@@ -14,10 +23,61 @@ public class Main {
             System.out.println("Quick Sort with -------" + length + " elements: " + Arrays.toString(quickSort));
             int[] mergeSort = mergeSort(arr);
             System.out.println("Merge Sort with -------" + length + " elements: " + Arrays.toString(mergeSort));
-            int[] timSort = timSort(arr);
+            timSort = timSort(arr);
             System.out.println("Tim Sort with ---------" + length + " elements: " + Arrays.toString(timSort));
 
         }
+        // Create a new dataset to hold the data for the chart
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        // Populate the dataset with the values from your sorted array
+        for (int i = 0; i < timSort.length; i++) {
+            dataset.addValue(timSort[i], "Data", Integer.toString(i + 1));
+        }
+
+        // Create a new chart and set the dataset
+        ChartWithInputBox chart = new ChartWithInputBox();
+        String inputText = chart.getTextField().getText();
+
+        chart.getButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Get input value from text field
+                String inputText = chart.getTextField().getText();
+                try {
+                    int lengthOfArray = Integer.parseInt(inputText);
+                    int length = (int) Math.pow(2, lengthOfArray);
+                    int[] randomArr = new int[length];
+                    for (int i = 0; i < Math.pow(2, lengthOfArray); i++) {
+                        randomArr[i] = ((int) (Math.random() * ((int) Math.pow(2, 11)))) * ((int) (Math.random() * 2) == 0 ? 1 : -1);
+                    }
+                    chart.createGraph(randomArr);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
+                }
+            }
+
+        });
+
+        chart.getSortButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Get input value from text field
+                String inputText = chart.getTextField().getText();
+                try {
+                    int lengthOfArray = Integer.parseInt(inputText);
+                    int length = (int) Math.pow(2, lengthOfArray);
+                    int[] randomArr = new int[length];
+                    for (int i = 0; i < Math.pow(2, lengthOfArray); i++) {
+                        randomArr[i] = ((int) (Math.random() * ((int) Math.pow(2, 11)))) * ((int) (Math.random() * 2) == 0 ? 1 : -1);
+                    }
+                    chart.createGraph(insertionSort(randomArr, 0, randomArr.length));
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
+                }
+            }
+
+        });
     }
 
     public static int[] insertionSort(int[] arr, int start, int end) {
