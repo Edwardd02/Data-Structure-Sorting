@@ -1,11 +1,12 @@
-import org.jfree.data.category.DefaultCategoryDataset;
-
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
     public static void main(String[] args) {
-        int[] timSort = new int[0];
+
         for (int n = 5; n < 10; n++) {
             int length = (int) Math.pow(2, n);
             int[] arr = new int[length];
@@ -18,59 +19,79 @@ public class Main {
             System.out.println("Quick Sort with -------" + length + " elements: " + Arrays.toString(quickSort));
             int[] mergeSort = mergeSort(arr);
             System.out.println("Merge Sort with -------" + length + " elements: " + Arrays.toString(mergeSort));
-            timSort = timSort(arr);
+            int[] timSort = timSort(arr);
             System.out.println("Tim Sort with ---------" + length + " elements: " + Arrays.toString(timSort));
 
         }
 
         // Create a new chart and set the dataset
         ChartWithInputBox chart = new ChartWithInputBox();
-        chart.setSize(1800, 1800);
+        int lengthOfArray = 5;
+
+        JTextField textField = chart.getTextField();
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateTextField();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateTextField();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateTextField();
+            }
+
+            private void updateTextField() {
+                String text = textField.getText();
+                System.out.println(text);
+                // Do something with the updated text
+            }
+        });
+
+
+        int length = (int) Math.pow(2, lengthOfArray);
+        int[] randomArr = new int[length];
         chart.getButton().addActionListener(e -> {
             // Get input value from text field
-            String inputText = chart.getTextField().getText();
             try {
-                int lengthOfArray = Integer.parseInt(inputText);
-                int length = (int) Math.pow(2, lengthOfArray);
-                int[] randomArr = new int[length];
+
                 for (int i = 0; i < Math.pow(2, lengthOfArray); i++) {
-                    randomArr[i] = ((int) (Math.random() * ((int) Math.pow(2, 11)))) * ((int) (Math.random() * 2) == 0 ? 1 : -1);
+                    randomArr[i] = ((int) (Math.random() * ((int) Math.pow(2, 10)))) * ((int) (Math.random() * 2) == 0 ? 1 : -1);
                 }
-                chart.createGraph(randomArr);
+                chart.updateGraph(randomArr);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
             }
         });
-
+        AtomicInteger start = new AtomicInteger(1);
         chart.getSortButton().addActionListener(e -> {
             // Get input value from text field
-            String inputText = chart.getTextField().getText();
             try {
-                int lengthOfArray = Integer.parseInt(inputText);
-                int length = (int) Math.pow(2, lengthOfArray);
-                int[] randomArr = new int[length];
-                for (int i = 0; i < Math.pow(2, lengthOfArray); i++) {
-                    randomArr[i] = ((int) (Math.random() * ((int) Math.pow(2, 11)))) * ((int) (Math.random() * 2) == 0 ? 1 : -1);
-                }
-                insertionSortDrawing(randomArr, 0, length, chart);
+                insertionSortDrawing(randomArr, start, length, chart);
+                start.getAndIncrement();
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
             }
         });
     }
 
-    public static void insertionSortDrawing(int[] arr, int start, int end, ChartWithInputBox chart) {
-            for (int nextPos = start + 1; nextPos < end; nextPos++) {
+    public static void insertionSortDrawing(int[] arr, AtomicInteger start, int end, ChartWithInputBox chart) {
+        int nextPos = start.get();
+            if (nextPos < end) {
 
-                int nextVal = arr[nextPos];
-                while (nextPos > start && arr[nextPos - 1] > nextVal) {
+                int nextVal = arr[start.get()];
+                while (nextPos > 0 && arr[nextPos - 1] > nextVal) {
 
                     arr[nextPos] = arr[nextPos - 1];
                     nextPos--;
                 }
                 arr[nextPos] = nextVal;
             }
-            chart.createGraph(arr);
+        chart.updateGraph(arr);
 
     }
 

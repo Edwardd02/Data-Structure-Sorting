@@ -1,4 +1,4 @@
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -6,6 +6,8 @@ import javax.swing.*;
 import org.jfree.chart.*;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.xy.XYSeries;
+
 
 public class ChartWithInputBox extends JFrame implements ActionListener {
 
@@ -13,7 +15,7 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
     private JButton createButton;
     private JButton sortButton;
     private DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
+    private ChartPanel chartPanel;
     private JFreeChart chart;
     public ChartWithInputBox() {
         super("Chart with Input Box");
@@ -29,7 +31,9 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
 
         // Create button
         createButton = new JButton("Create Graph");
-        sortButton = new JButton("Start Sorting");
+        sortButton = new JButton("Next Step");
+
+        // Add button to panel and event listener
         createButton.addActionListener(this);
         sortButton.addActionListener(this);
         inputPanel.add(createButton);
@@ -37,38 +41,26 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
 
         // Create chart panel
 
-        ChartPanel chartPanel = new ChartPanel(chart);
-
-        // Add input box panel and chart panel to frame
+        chart = ChartFactory.createLineChart(
+                "Array Graph", "Index", "Value", dataset,
+                PlotOrientation.VERTICAL, false, true, false);
+        chart.setBackgroundPaint(Color.WHITE);
+        chartPanel = new ChartPanel(chart);
+        add(chartPanel);
+        setTitle("Insertion Sort Animation");
+        setSize(1500,1000);
+        setLocationRelativeTo(null);
         add(inputPanel, BorderLayout.NORTH);
         add(chartPanel, BorderLayout.CENTER);
-        pack();
         setVisible(true);
     }
 
-    public JButton getButton() {
-        return createButton;
-    }
-    public JButton getSortButton() {
-        return sortButton;
-    }
-    public JTextField getTextField() {
-        return textField;
-    }
-    public DefaultCategoryDataset getDataset() {
-        return dataset;
-    }
-    public void createGraph(int[] arr) {
+    public void updateGraph(int[] arr) {
 
         for (int i = 0; i < arr.length; i++) {
-            dataset.addValue(arr[i], "Data", Integer.toString(i + 1));
+            dataset.setValue(arr[i], "Data", Integer.toString(i + 1));
         }
 
-        chart = ChartFactory.createLineChart("Array Graph", "Index", "Value", dataset, PlotOrientation.VERTICAL, true, true, false);
-        ChartPanel chartPanel = new ChartPanel(chart);
-        add(chartPanel, BorderLayout.CENTER);
-        pack();
-        setVisible(true);
     }
 
 
@@ -83,6 +75,20 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
             }
             textField.setText("");
         }
+    }
+    public JButton getButton() {
+        return createButton;
+    }
+    public JButton getSortButton() {
+        return sortButton;
+    }
+
+
+    public JTextField getTextField() {
+        return textField;
+    }
+    public DefaultCategoryDataset getDataset() {
+        return dataset;
     }
 
 
