@@ -12,7 +12,7 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
     private JTextField textField;
     private JButton createButton;
     private JButton sortButton;
-    private DefaultCategoryDataset dataset;
+    private DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
     private JFreeChart chart;
     public ChartWithInputBox() {
@@ -59,7 +59,6 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
         return dataset;
     }
     public void createGraph(int[] arr) {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         for (int i = 0; i < arr.length; i++) {
             dataset.addValue(arr[i], "Data", Integer.toString(i + 1));

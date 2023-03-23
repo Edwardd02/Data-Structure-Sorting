@@ -1,12 +1,7 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Arrays;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartFrame;
-import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import javax.swing.*;
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
@@ -37,46 +32,37 @@ public class Main {
 
         // Create a new chart and set the dataset
         ChartWithInputBox chart = new ChartWithInputBox();
-        String inputText = chart.getTextField().getText();
 
-        chart.getButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Get input value from text field
-                String inputText = chart.getTextField().getText();
-                try {
-                    int lengthOfArray = Integer.parseInt(inputText);
-                    int length = (int) Math.pow(2, lengthOfArray);
-                    int[] randomArr = new int[length];
-                    for (int i = 0; i < Math.pow(2, lengthOfArray); i++) {
-                        randomArr[i] = ((int) (Math.random() * ((int) Math.pow(2, 11)))) * ((int) (Math.random() * 2) == 0 ? 1 : -1);
-                    }
-                    chart.createGraph(randomArr);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
+        chart.getButton().addActionListener(e -> {
+            // Get input value from text field
+            String inputText = chart.getTextField().getText();
+            try {
+                int lengthOfArray = Integer.parseInt(inputText);
+                int length = (int) Math.pow(2, lengthOfArray);
+                int[] randomArr = new int[length];
+                for (int i = 0; i < Math.pow(2, lengthOfArray); i++) {
+                    randomArr[i] = ((int) (Math.random() * ((int) Math.pow(2, 11)))) * ((int) (Math.random() * 2) == 0 ? 1 : -1);
                 }
+                chart.createGraph(randomArr);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
             }
-
         });
 
-        chart.getSortButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Get input value from text field
-                String inputText = chart.getTextField().getText();
-                try {
-                    int lengthOfArray = Integer.parseInt(inputText);
-                    int length = (int) Math.pow(2, lengthOfArray);
-                    int[] randomArr = new int[length];
-                    for (int i = 0; i < Math.pow(2, lengthOfArray); i++) {
-                        randomArr[i] = ((int) (Math.random() * ((int) Math.pow(2, 11)))) * ((int) (Math.random() * 2) == 0 ? 1 : -1);
-                    }
-                    chart.createGraph(insertionSort(randomArr, 0, randomArr.length));
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
+        chart.getSortButton().addActionListener(e -> {
+            // Get input value from text field
+            String inputText = chart.getTextField().getText();
+            try {
+                int lengthOfArray = Integer.parseInt(inputText);
+                int length = (int) Math.pow(2, lengthOfArray);
+                int[] randomArr = new int[length];
+                for (int i = 0; i < Math.pow(2, lengthOfArray); i++) {
+                    randomArr[i] = ((int) (Math.random() * ((int) Math.pow(2, 11)))) * ((int) (Math.random() * 2) == 0 ? 1 : -1);
                 }
+                chart.createGraph(insertionSort(randomArr, 0, randomArr.length));
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
             }
-
         });
     }
 
