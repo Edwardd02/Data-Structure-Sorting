@@ -19,6 +19,9 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
     private DefaultCategoryDataset dataset = new DefaultCategoryDataset();
     private ChartPanel chartPanel;
     private JFreeChart chart;
+
+    private String[] options = {"Insertion Sort", "Quick Sort", "Merge Sort", "Tim Sort"};
+    private JComboBox<String> comboBox = new JComboBox<>(options);
     public ChartWithInputBox() {
         super("Chart with Input Box");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,6 +44,12 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
         inputPanel.add(createButton);
         inputPanel.add(sortButton);
 
+        // Create the spinner with a range of values
+        // Create a JComboBox with some options
+
+
+        // Add the spinner to the graph's panel
+        inputPanel.add(comboBox);
         // Create chart panel
 
         chart = ChartFactory.createLineChart(
@@ -85,7 +94,9 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
         return sortButton;
     }
 
-
+    public JComboBox<String> getComboBox() {
+        return comboBox;
+    }
     public JTextField getTextField() {
         return textField;
     }

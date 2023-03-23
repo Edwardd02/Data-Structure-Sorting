@@ -1,8 +1,10 @@
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
@@ -74,8 +76,31 @@ public class Main {
         chart.getSortButton().addActionListener(e -> {
             // Get input value from text field
             try {
-                insertionSortDrawing(randomArr, start, (int) Math.pow(2, size[0]), chart);
-                start.getAndIncrement();
+                chart.getComboBox().addActionListener(e1 -> {
+                        String selected = (String) chart.getComboBox().getSelectedItem();
+                        switch (Objects.requireNonNull(selected)) {
+                            case "Insertion Sort" -> {
+                                insertionSortDrawing(randomArr, start, (int) Math.pow(2, size[0]), chart);
+                                start.getAndIncrement();
+                            }
+                            case "Quick Sort" -> {
+                                quickSortDrawing(randomArr, start, (int) Math.pow(2, size[0]) - 1, chart);
+                                start.getAndIncrement();
+                            }
+                            case "Merge Sort" -> {
+                                return;
+                            }
+                            case "Tim Sort" -> {
+                                return;
+                            }
+                            case default -> {
+                                System.out.println("Error");
+                            }
+
+
+                    }
+                });
+
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
             }
@@ -105,6 +130,32 @@ public class Main {
         chart.updateGraph(arr, end);
 
     }
+    public static void quickSortDrawing(ArrayList<Integer> arr, AtomicInteger start, int end, ChartWithInputBox chart) {
+        int first = start.get();
+        if (first < end) {
+            int pivot = arr.get(first);
+            int up = first;
+            int down = end;
+            do {
+                while (arr.get(up) <= pivot && up != end) {
+                    up++;
+                }
+                while (arr.get(down) >= pivot && down != first) {
+                    down--;
+                }
+                if (up < down) {
+                    int temp = arr.get(up);
+                    arr.set(up, arr.get(down));
+                    arr.set(down, temp);
+                }
+            } while (up < down);
+            int temp = arr.get(first);
+            arr.set(first, arr.get(down));
+            arr.set(down, temp);
+            start.getAndIncrement();
+            chart.updateGraph(arr, end);
+        }
+    }
 
     public static int[] insertionSort(int[] arr, int start, int end) {
         for (int nextPos = start + 1; nextPos < end; nextPos++) {
@@ -122,9 +173,11 @@ public class Main {
 
     static public int[] quickSort(int[] arr, int first, int last) {
         if (first < last) {
+            //set the first element as the pivot
             int pivot = arr[first];
             int up = first;
             int down = last;
+            //partition the array
             do {
                 while (arr[up] <= pivot && up != last) {
                     up++;
@@ -142,6 +195,7 @@ public class Main {
             arr[first] = arr[down];
             arr[down] = temp;
             int pivIndex = down;
+            //recursively sort the two sub-arrays
             arr = quickSort(arr, first, pivIndex - 1);
             arr = quickSort(arr, pivIndex + 1, last);
         }
