@@ -22,17 +22,10 @@ public class Main {
             System.out.println("Tim Sort with ---------" + length + " elements: " + Arrays.toString(timSort));
 
         }
-        // Create a new dataset to hold the data for the chart
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-        // Populate the dataset with the values from your sorted array
-        for (int i = 0; i < timSort.length; i++) {
-            dataset.addValue(timSort[i], "Data", Integer.toString(i + 1));
-        }
 
         // Create a new chart and set the dataset
         ChartWithInputBox chart = new ChartWithInputBox();
-
+        chart.setSize(1800, 1800);
         chart.getButton().addActionListener(e -> {
             // Get input value from text field
             String inputText = chart.getTextField().getText();
@@ -68,12 +61,7 @@ public class Main {
 
     public static void insertionSortDrawing(int[] arr, int start, int end, ChartWithInputBox chart) {
             for (int nextPos = start + 1; nextPos < end; nextPos++) {
-                chart.createGraph(arr);
-                try {
-                    Thread.sleep(5000); // sleep for 1 second
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
                 int nextVal = arr[nextPos];
                 while (nextPos > start && arr[nextPos - 1] > nextVal) {
 
@@ -82,6 +70,8 @@ public class Main {
                 }
                 arr[nextPos] = nextVal;
             }
+            chart.createGraph(arr);
+
     }
 
     public static int[] insertionSort(int[] arr, int start, int end) {
