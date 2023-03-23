@@ -81,16 +81,16 @@ public class Main {
 
     public static void insertionSortDrawing(int[] arr, AtomicInteger start, int end, ChartWithInputBox chart) {
         int nextPos = start.get();
-            if (nextPos < end) {
+        if (nextPos < end) {
 
-                int nextVal = arr[start.get()];
-                while (nextPos > 0 && arr[nextPos - 1] > nextVal) {
+            int nextVal = arr[start.get()];
+            while (nextPos > 0 && arr[nextPos - 1] > nextVal) {
 
-                    arr[nextPos] = arr[nextPos - 1];
-                    nextPos--;
-                }
-                arr[nextPos] = nextVal;
+                arr[nextPos] = arr[nextPos - 1];
+                nextPos--;
             }
+            arr[nextPos] = nextVal;
+        }
         chart.updateGraph(arr);
 
     }
