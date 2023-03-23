@@ -74,18 +74,10 @@ public class Main {
             String selected = (String) chart.getComboBox().getSelectedItem();
             System.out.println(selected);
             switch (Objects.requireNonNull(selected)) {
-                case "Insertion Sort" -> {
-                    sortType.set(1);
-                }
-                case "Quick Sort" -> {
-                    sortType.set(2);
-                }
-                case "Merge Sort" -> {
-                    sortType.set(3);
-                }
-                case "Tim Sort" -> {
-                    sortType.set(4);
-                }
+                case "Insertion Sort" -> sortType.set(1);
+                case "Quick Sort" -> sortType.set(2);
+                case "Merge Sort" -> sortType.set(3);
+                case "Tim Sort" -> sortType.set(4);
             }
         });
 
