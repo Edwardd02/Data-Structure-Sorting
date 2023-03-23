@@ -13,15 +13,15 @@ import java.util.ArrayList;
 
 public class ChartWithInputBox extends JFrame implements ActionListener {
 
-    private JTextField textField;
-    private JButton createButton;
-    private JButton sortButton;
-    private DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-    private ChartPanel chartPanel;
-    private JFreeChart chart;
+    private final JTextField textField;
+    private final JButton createButton;
+    private final JButton sortButton;
+    private final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+    private final ChartPanel chartPanel;
+    private final JFreeChart chart;
 
-    private String[] options = {"Insertion Sort", "Quick Sort", "Merge Sort", "Tim Sort"};
-    private JComboBox<String> comboBox = new JComboBox<>(options);
+    private final String[] options = {"Insertion Sort", "Quick Sort", "Merge Sort", "Tim Sort"};
+    private final JComboBox<String> comboBox = new JComboBox<>(options);
     public ChartWithInputBox() {
         super("Chart with Input Box");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
