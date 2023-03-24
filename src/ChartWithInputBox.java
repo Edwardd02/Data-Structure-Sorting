@@ -67,7 +67,7 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
     }
 
     public void updateGraph(ArrayList<Integer> arr, int length) {
-
+        dataset.clear();
         for (int i = 0; i < length; i++) {
             dataset.setValue(arr.get(i), "Data", Integer.toString(i + 1));
         }
