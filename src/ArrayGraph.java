@@ -51,7 +51,7 @@ public class ArrayGraph extends JFrame implements ActionListener {
                 "Array Graph", "Index", "Value", dataset,
                 PlotOrientation.VERTICAL,  false, true, false);
 
-        chart.setBackgroundPaint(Color.BLACK);
+        chart.setBackgroundPaint(Color.WHITE);
         chartPanel = new ChartPanel(chart);
         add(chartPanel);
 
