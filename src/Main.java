@@ -19,7 +19,7 @@ Which make the algorithm unlike normal sorting algorithms(so it's actually slowe
 */
 public class Main {
     public static void main(String[] args) {
-
+        //Tests for normal sorting algorithms
         for (int n = 5; n < 10; n++) {
             int length = (int) Math.pow(2, n);
             int[] arr = new int[length];
@@ -38,10 +38,11 @@ public class Main {
         }
 
         // Create a new chart and set the dataset
-        ChartWithInputBox chart = new ChartWithInputBox();
+        ArrayGraph chart = new ArrayGraph();
         int[] size = new int[1];
         size[0] = 5;
         ArrayList<Integer> randomArr = new ArrayList<>();
+        //set a document listener for the text field
         JTextField textField = chart.getTextField();
         textField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -73,9 +74,11 @@ public class Main {
         //var for tim sort
         AtomicBoolean isInserted = new AtomicBoolean(false);
         AtomicInteger timSortRun = new AtomicInteger(32);
-        chart.getButton().addActionListener(e -> {
-            // Get input value from text field
+        //an action listener for the button that draw the graph
+        chart.getGraphButton().addActionListener(e -> {
+
             try {
+                //set all the variables to their default values
                 start.set(1);
                 quickSortIndexes.clear();
                 step.set(2);
@@ -85,6 +88,7 @@ public class Main {
                 quickSortIndexes.add(0);
                 quickSortIndexes.add(lengthOfArray - 1);
                 randomArr.clear();
+                //generate a random array and draw it
                 for (int i = 0; i < lengthOfArray; i++) {
                     randomArr.add(((int) (Math.random() * ((int) Math.pow(2, 10)))) * ((int) (Math.random() * 2) == 0 ? 1 : -1));
                 }
@@ -93,6 +97,7 @@ public class Main {
                 JOptionPane.showMessageDialog(chart, "Invalid input: Please enter an integer.");
             }
         });
+        //an action listener for the ComboBox that chooses the sorting algorithm
         AtomicInteger sortType = new AtomicInteger(1);
         chart.getComboBox().addActionListener(e1 -> {
             String selected = (String) chart.getComboBox().getSelectedItem();
@@ -104,34 +109,39 @@ public class Main {
                 case "Tim Sort" -> sortType.set(4);
             }
         });
-
+        //an action listener for the button that sorts the array step by step
         chart.getSortButton().addActionListener(e -> {
             // Get input value from text field
             try {
                 int lengthOfArray = (int) Math.pow(2, size[0]);
                 if (sortType.get() == 1) {
+                    //insertion sort
                     insertionSortDrawing(randomArr, start, (int) Math.pow(2, size[0]), chart);
                     start.getAndIncrement();
                 } else if (sortType.get() == 2) {
-                    //arr = quickSort(arr, first, pivIndex - 1);
-                    //arr = quickSort(arr, pivIndex + 1, last);
+                    //quick sort this creates a new ArrayList for each step
+                    //the ArrayList contains the indexes of the sub-arrays that need to be sorted with quick sort
+                    //the ArrayList is sorted in ascending order to make sure that the indexes are in the right order
                     quickSortIndexes.sort(Comparator.naturalOrder());
                     ArrayList<Integer> temp = new ArrayList<>();
+                    //go through the ArrayList and sort the sub-arrays with quick sort
                     for (int i = 0; i < quickSortIndexes.size(); i += 2) {
                         if (quickSortIndexes.get(i) < quickSortIndexes.get(i + 1) && quickSortIndexes.get(i) != -1 && quickSortIndexes.get(i + 1) != lengthOfArray) {
                             int pivIndex = quickSortDrawing(randomArr, quickSortIndexes.get(i), quickSortIndexes.get(i + 1), lengthOfArray, chart);
                             if (quickSortIndexes.get(i + 1) - quickSortIndexes.get(i) > 1) {
+                                //add the indexes of the sub-arrays to the temp ArrayList, so that they can be sorted in the next step, next
+                                //indexes are based on the pivot index that was returned by the quickSortDrawing method
                                 temp.add(pivIndex - 1);
                                 temp.add(pivIndex + 1);
                             }
                         }
-
                     }
+                    //add the new sub-arrays to the ArrayList
                     quickSortIndexes.addAll(temp);
-
-
                 } else if (sortType.get() == 3) {
-
+                    //merge sort
+                    //the merge sort is done by merging the sub-arrays in pairs
+                    //since we understand the principle of merge sort, it's easy to see why we want to do this way to modify the merge sort
                     for (int i = 0; i < lengthOfArray; i += step.get()) {
                         mergeSortDrawing(randomArr, i, Math.min(i + step.get(), lengthOfArray), chart);
                     }
@@ -139,6 +149,7 @@ public class Main {
                         step.set(step.get() * 2);
                     }
                 } else if (sortType.get() == 4) {
+                    //tim sort
                     timSortRun.set(timSortDrawing(randomArr, lengthOfArray, isInserted, timSortRun, chart));
                 }
 
@@ -150,29 +161,33 @@ public class Main {
 
 
     private static void updateTextField(JTextField textField, int[] length) {
+        // Get the text from the text field and update it to the array
         String text = textField.getText();
         System.out.println(text);
         if (text.length() > 0) {
             length[0] = Integer.parseInt(text);
         }
-
-        // Do something with the updated text
+        else {
+            length[0] = 5;
+        }
     }
-
+    // normal insertion sort algorithm
     public static int[] insertionSort(int[] arr, int start, int end) {
+        //start from the second element
         for (int nextPos = start + 1; nextPos < end; nextPos++) {
-
+            //save the value of the element
             int nextVal = arr[nextPos];
+            //shift the elements to the right until the correct position is found
             while (nextPos > start && arr[nextPos - 1] > nextVal) {
-
                 arr[nextPos] = arr[nextPos - 1];
                 nextPos--;
             }
+            //insert the element
             arr[nextPos] = nextVal;
         }
         return arr;
     }
-
+    // normal quick sort algorithm
     static public int[] quickSort(int[] arr, int first, int last) {
         if (first < last) {
             //set the first element as the pivot
@@ -203,17 +218,21 @@ public class Main {
         }
         return arr;
     }
-
+    // normal merge sort algorithm
     public static int[] mergeSort(int[] arr) {
         int tableSize = arr.length;
+        //if the array has more than one element
         if (tableSize > 1) {
+            //split the array into two sub-arrays
             int halfSize = tableSize / 2;
             int[] leftTable;
             int[] rightTable;
             leftTable = Arrays.copyOfRange(arr, 0, halfSize);
             rightTable = Arrays.copyOfRange(arr, halfSize, tableSize);
+            //recursively sort the two sub-arrays
             mergeSort(leftTable);
             mergeSort(rightTable);
+            //merge the two sub-arrays
             int i = 0, j = 0, n = 0;
             for (; i < leftTable.length && j < rightTable.length; n++) {
                 if (leftTable[i] < rightTable[j]) {
@@ -234,15 +253,18 @@ public class Main {
                 }
             }
         }
+        //return the sorted array
         return arr;
     }
-
+    // normal tim sort algorithm
     public static int[] timSort(int[] arr) {
+        //sort the array using insertion sort
         int length = arr.length;
         int run = 16;
         for (int i = 0; i < length; i += run) {
             insertionSort(arr, i, Math.min((i + run), length));
         }
+        //sort the array using merge sort with the run size doubled each time, until the run size is greater than the length of the array
         if (run > length) {
             return arr;
         } else {
@@ -257,14 +279,16 @@ public class Main {
         return arr;
 
     }
-
-    public static void insertionSortDrawing(ArrayList<Integer> arr, AtomicInteger start, int end, ChartWithInputBox chart) {
+    // insertion sort algorithm for drawing, it basically does the same thing as the normal insertion sort algorithm, but it's not sorting with a loop,
+    // so it can be used to draw the sorting process step by step, which modifies the sorting algorithm
+    public static void insertionSortDrawing(ArrayList<Integer> arr, AtomicInteger start, int end, ArrayGraph chart) {
+        //start from the second element
         int nextPos = start.get();
         if (nextPos < end) {
-
+            //save the value of the element
             int nextVal = arr.get(start.get());
             while (nextPos > 0 && arr.get(nextPos - 1) > nextVal) {
-
+                //shift the elements to the right until the correct position is found
                 arr.set(nextPos, arr.get(nextPos - 1));
                 nextPos--;
             }
@@ -273,8 +297,9 @@ public class Main {
         chart.updateGraph(arr, end);
 
     }
-
-    public static int quickSortDrawing(ArrayList<Integer> arr, int first, int last, int length, ChartWithInputBox chart) {
+    // quick sort algorithm for drawing, it basically does the same thing as the normal merge sort algorithm, but it's not sorting with a recursive method,
+    // instead, it modifies the sorting algorithm and recursive process step by step, so it can be used to draw the sorting process step by step
+    public static int quickSortDrawing(ArrayList<Integer> arr, int first, int last, int length, ArrayGraph chart) {
         //set the first element as the pivot
         int pivot = arr.get(first);
         int up = first;
@@ -297,15 +322,19 @@ public class Main {
         arr.set(first, arr.get(down));
         arr.set(down, temp);
         int pivIndex = down;
-        //recursively sort the two sub-arrays
         chart.updateGraph(arr, length);
+        // return the pivot index for next drawing step
         return pivIndex;
 
     }
-
-    private static void mergeSortDrawing(ArrayList<Integer> arr, int first, int last, ChartWithInputBox chart) {
+    // merge sort algorithm for drawing, it basically does the same thing as the normal merge sort algorithm, but it's not sorting with a recursive method,
+    // instead, it modifies the sorting algorithm and recursive process step by step, so it can be used to draw the sorting process step by step
+    private static void mergeSortDrawing(ArrayList<Integer> arr, int first, int last, ArrayGraph chart) {
+        //The first and last define the sub-array to be sorted, so we can modify the sorting algorithm and recursive process step by step with modifying the first and last
         int tableSize = last - first;
+        //if the array has more than one element
         if (tableSize > 1) {
+            //split the array into two sub-arrays and sort them
             int halfSize = tableSize / 2;
             int[] leftTable = new int[halfSize];
             int[] rightTable = new int[tableSize - halfSize];
@@ -340,9 +369,14 @@ public class Main {
         chart.updateGraph(arr, arr.size());
     }
 
-    private static int timSortDrawing(ArrayList<Integer> randomArr, int lengthOfArray, AtomicBoolean isInserted, AtomicInteger timSortRun, ChartWithInputBox chart) {
+    // tim sort algorithm for drawing, it basically does the same thing as the normal tim sort algorithm
+    // first, it sorts the array using insertion sort, then it sorts the array using merge sort with the run size doubled each time,
+    // until the run size is greater than the length of the array
+    // the run of this algorithm is 32, which is the default run size of the tim sort algorithm
+    private static int timSortDrawing(ArrayList<Integer> randomArr, int lengthOfArray, AtomicBoolean isInserted, AtomicInteger timSortRun, ArrayGraph chart) {
+        //sort the array using insertion sort, if it's not sorted yet
         if (!isInserted.get()) {
-            for(int i = 0; i < lengthOfArray; i += timSortRun.get()){
+            for (int i = 0; i < lengthOfArray; i += timSortRun.get()) {
                 for (int nextPos = i + 1; nextPos < lengthOfArray && nextPos < i + timSortRun.get(); nextPos++) {
 
                     int nextVal = randomArr.get(nextPos);
@@ -354,10 +388,9 @@ public class Main {
                     randomArr.set(nextPos, nextVal);
                 }
             }
-
-
             isInserted.set(true);
             chart.updateGraph(randomArr, lengthOfArray);
+            //sort the array using merge sort, if it's sorted with insertion sort of run size 32
         } else {
             if (timSortRun.get() < lengthOfArray) {
                 timSortRun.set(timSortRun.get() * 2);
@@ -365,7 +398,7 @@ public class Main {
             for (int i = 0; i < lengthOfArray; i += timSortRun.get()) {
                 mergeSortDrawing(randomArr, i, Math.min(i + timSortRun.get(), lengthOfArray), chart);
             }
-
+            //return the run size of the tim sort algorithm to prepare for the next drawing step
             return timSortRun.get();
         }
         return timSortRun.get();

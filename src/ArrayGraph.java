@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 
-public class ChartWithInputBox extends JFrame implements ActionListener {
+public class ArrayGraph extends JFrame implements ActionListener {
 
     private final JTextField textField;
     private final JButton createButton;
@@ -22,7 +22,7 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
 
     private final String[] options = {"Insertion Sort", "Quick Sort", "Merge Sort", "Tim Sort"};
     private final JComboBox<String> comboBox = new JComboBox<>(options);
-    public ChartWithInputBox() {
+    public ArrayGraph() {
         super("Chart with Input Box");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -34,7 +34,7 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
         inputPanel.add(label);
         inputPanel.add(textField);
 
-        // Create button
+        // Create buttons
         createButton = new JButton("Create Graph");
         sortButton = new JButton("Next Step");
 
@@ -43,15 +43,10 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
         sortButton.addActionListener(this);
         inputPanel.add(createButton);
         inputPanel.add(sortButton);
-
-        // Create the spinner with a range of values
-        // Create a JComboBox with some options
-
-
-        // Add the spinner to the graph's panel
+        // Add combo box to panel
         inputPanel.add(comboBox);
-        // Create chart panel
 
+        // Create chart
         chart = ChartFactory.createLineChart(
                 "Array Graph", "Index", "Value", dataset,
                 PlotOrientation.VERTICAL, false, true, false);
@@ -59,13 +54,18 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
         chartPanel = new ChartPanel(chart);
         add(chartPanel);
         setTitle("Insertion Sort Animation");
-        setSize(1500,1000);
+        setSize(1300,1000);
         setLocationRelativeTo(null);
         add(inputPanel, BorderLayout.NORTH);
         add(chartPanel, BorderLayout.CENTER);
         setVisible(true);
     }
-
+    // Update the graph, it updates the graph with the array that is passed in with set a new set of value for the graph
+    // so this won't create a new graph that covers on the old one
+    // This is important for 2 reasons
+    // 1. It will not eat up more memory
+    // 2. When user stretch the window, we won't see the old graphs
+    // This is interesting because it's similar to the fragment of android
     public void updateGraph(ArrayList<Integer> arr, int length) {
         dataset.clear();
         for (int i = 0; i < length; i++) {
@@ -75,7 +75,7 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
     }
 
 
-
+    // This is the event listener for the buttons
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == textField) {
             try {
@@ -87,7 +87,7 @@ public class ChartWithInputBox extends JFrame implements ActionListener {
             textField.setText("");
         }
     }
-    public JButton getButton() {
+    public JButton getGraphButton() {
         return createButton;
     }
     public JButton getSortButton() {
