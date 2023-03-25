@@ -49,11 +49,13 @@ public class ArrayGraph extends JFrame implements ActionListener {
         // Create chart
         chart = ChartFactory.createLineChart(
                 "Array Graph", "Index", "Value", dataset,
-                PlotOrientation.VERTICAL, false, true, false);
-        chart.setBackgroundPaint(Color.WHITE);
+                PlotOrientation.VERTICAL,  false, true, false);
+
+        chart.setBackgroundPaint(Color.BLACK);
         chartPanel = new ChartPanel(chart);
         add(chartPanel);
-        setTitle("Insertion Sort Animation");
+
+        setTitle("Sort Animation");
         setSize(1300,1000);
         setLocationRelativeTo(null);
         add(inputPanel, BorderLayout.NORTH);
